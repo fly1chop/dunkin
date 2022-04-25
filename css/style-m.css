@@ -23,6 +23,7 @@ br.only-pc::after {content: '\00a0';}
 
 /* common */
 body {font-family: 'NanumSquare', sans-serif; font-size: 14px; color: #372317; background: #ffffff;}
+body.no-scroll {height: 100vh; overflow: hidden;}
 #skip-nav {position: fixed; left: 50%; top: -45px; transform: translateX(-50%); width: 200px; line-height: 40px; text-align: center; background-color: #f56200; color: #ffffff; font-weight: 700; font-size: 16px; border: 1px solid #f56200; box-sizing: border-box; border-radius: 100px; transition: top 0.3s; z-index: 10000;}
 #skip-nav:focus {top: 5px;}
 #header {position: fixed; left: 0; top: 0; width: 100%; height: 68px; background: #f8faf0; border-bottom: 1px solid #372317; z-index: 1000; box-sizing: border-box;}
@@ -72,8 +73,6 @@ body {font-family: 'NanumSquare', sans-serif; font-size: 14px; color: #372317; b
 #footer .info-link > a {display: inline-block; width: calc(25% - 5px);}
 
 
-
-
 #gnb > ul > li {padding-left: 30px; border-bottom: 1px solid #958b7f;}
 #gnb > ul > li.on {background: #fff;}
 #gnb > ul > li > a {position: relative; display: block; font-weight: 700; line-height: 57px; width: 100%; height: 100%; color: #fff;}
@@ -98,6 +97,14 @@ body {font-family: 'NanumSquare', sans-serif; font-size: 14px; color: #372317; b
 #gnb li[data-menu="bev"] > a::before {background: url(../img/mob_nav_bev.png) 50% 50% no-repeat; background-size: 14px auto;}
 #gnb li[data-menu="other"] > a::before {background: url(../img/mob_nav_other.png) 50% 50% no-repeat; background-size: 10px auto;}
 
+/* popup */
+#layer-mask {position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); display: none;}
+#layer-mask.on {display: block; animation: show-up-mask 1s ease 0s 1 normal forwards;}
+@keyframes show-up-mask {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
 /* main */
 #main {position: relative; top: 68px;}
 #main-visual {position: relative; width: 100%; height: 100%; overflow: hidden; margin-bottom: 50px;}
@@ -106,16 +113,17 @@ body {font-family: 'NanumSquare', sans-serif; font-size: 14px; color: #372317; b
 #main-visual ul.slide {position: absolute; left: 0; top: 0; width: 100%; height: 100%;}
 #main-visual ul.slide > li {position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: hidden;}
 #main-visual ul.slide > li > a {display: block; height: 100%; width: 100%;}
-#main-visual ul.slide > li img {width: 100%; display: none;}
-#main-visual ul.slide > li.on img {display: block;}
-#main-visual > .indicator {position: absolute; bottom: 30px; left: 0; display: block; width: 100%; text-align: center;}
-#main-visual > .indicator > ul > li {display: inline-block; vertical-align: middle;}
-#main-visual > .indicator > ul > li > a {display: block; width: 8px; height: 8px; background: #d6cfcd; overflow: hidden; text-indent: -9999px; border-radius: 100px; box-sizing: border-box;}
-#main-visual > .indicator > ul > li.on > a {width: 15px; height: 15px; background-color: #fff;}
-#main-visual > .control {position: absolute; top: 50vh; left: 50%; transform: translate(-50%, -50%); width: 100%; max-width: 1200px; box-sizing: border-box;}
-#main-visual > .control > a {display: block; position: absolute; width: 70px; color: #fff; font-weight: 700; font-size: 15px; height: 20px; border-bottom: 1px solid #fff;}
-#main-visual > .control > a.prev {text-align: right; left: 15px;}
-#main-visual > .control > a.next {right: 15px;}
+#main-visual ul.slide > li img {width: 100%;}
+#main-visual ul.slide > li img:nth-child(1) {display: none; opacity: 0;}
+/* #main-visual ul.slide > li.on img {display: block;} */
+#main-visual ul.indicator {position: absolute; bottom: 30px; left: 0; display: block; width: 100%; text-align: center;}
+#main-visual ul.indicator > li {display: inline-block; vertical-align: middle;}
+#main-visual ul.indicator > li > a {display: block; width: 8px; height: 8px; background: #d6cfcd; overflow: hidden; text-indent: -9999px; border-radius: 100px; box-sizing: border-box;}
+#main-visual ul.indicator > li.on > a {width: 15px; height: 15px; background-color: #fff;}
+#main-visual .control {position: absolute; top: 50vh; left: 50%; transform: translate(-50%, -50%); width: 100%; max-width: 1200px; box-sizing: border-box;}
+#main-visual .control > a {display: block; position: absolute; width: 70px; color: #fff; font-weight: 700; font-size: 15px; height: 20px; border-bottom: 1px solid #fff;}
+#main-visual .control > a.prev {text-align: right; left: 15px;}
+#main-visual .control > a.next {right: 15px;}
 
 #news ul.top {text-align: center; margin-bottom: 20px;}
 #news h3 {width: 100px; margin: 0 auto; padding-bottom: 20px;}
@@ -171,6 +179,7 @@ ul.sns-icon > li + li {margin-left: 20px;}
 ul.sns-icon > li > a {display: block; height: 100%; width: 100%;}
 ul.sns-icon > li > a i {position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%)}
 ul.sns-icon.large > li {width: 50px; height: 50px; border: 1px solid #c8bfb0; font-size: 20px; color: #c2ab8d;}
+
 
 /* animation keyframes */
 /*

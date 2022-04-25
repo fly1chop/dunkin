@@ -14,12 +14,15 @@
   <link rel="stylesheet" href="css/style-pc.css" media="screen and (min-width: 1024.0px)" />
   <link rel="stylesheet" href="css/style-m.css" media="screen and (max-width: 1023.9px)" />
   <script src="js/jquery-3.6.0.min.js"></script>
-  <script src="js/common.js"></script>
+  <script src="js/main.js"></script>
 </head>
 <body class="main">
   <div class="wrapper">
     <a href="#main" id="skip-nav">본문 바로가기</a>
     <div id="monthly" class="pc">
+      <div class="pull-down">
+        <a href="#"><i class="xi-angle-down-thin"><span>열기/닫기</span></i>MONTHLY DUNKIN</a>
+      </div>
       <div class="box">
         <ul>
           <li>
@@ -32,9 +35,6 @@
             <a href="#"><img src="img/monthly_dom.png" alt="이달의 도너츠 로얄 밀크티 도넛" /></a>
           </li>
         </ul>
-      </div>
-      <div class="pull-down">
-        <a href="#"><i class="xi-angle-down-thin"><span>열기/닫기</span></i>MONTHLY DUNKIN</a>
       </div>
     </div>
     <header id="header">
@@ -56,13 +56,14 @@
             <li class="search">
               <input type="text" name="" id="search" value="" />
               <label for="search">
-                <i class="fa-solid fa-magnifying-glass"><span>검색하기</span>
-                </i>
+                <a href="#"><i class="fa-solid fa-magnifying-glass"><span>검색하기</span>
+                </i></a>
               </label>
             </li>
           </ul>
         </div>
       </div>
+      <div id="layer-mask"></div>
       <div class="btm-menu">
         <a href="#" class="menu-x mobile"><i class="xi-close"><span>메뉴 닫기</span></i></a>
         <div class="box">
@@ -351,44 +352,74 @@
     <main id="main">
       <section id="main-visual">
         <h3 class="ir-hidden">주요 제품 소개</h3>
-        <div class="box">
-          <p class="dummy mobile"><img src="img/main-visual-m-01.jpeg" alt="000 000 000" /></p>
-          <ul class="slide pc">
-            <li class="on">
-              <a href="#"><img src="img/main-visual-01.jpeg" alt="000 000 000" /></a></li>
-            <li><a href="#"><img src="img/main-visual-02.jpeg" alt="000 000 000" /></a></li>
-            <li><a href="#"><img src="img/main-visual-03.jpeg" alt="000 000 000" /></a></li>
-            <li><a href="#"><img src="img/main-visual-04.jpeg" alt="000 000 000" /></a></li>
-            <li><a href="#"><img src="img/main-visual-05.png" alt="000 000 000" /></a></li>
-            <li><a href="#"><img src="img/main-visual-06.png" alt="000 000 000" /></a></li>
-          </ul>
-          <ul class="slide mobile">
-            <li class="on">
-              <a href="#"><img src="img/main-visual-m-01.jpeg" alt="000 000 000" /></a></li>
-            <li><a href="#"><img src="img/main-visual-m-02.jpeg" alt="000 000 000" /></a></li>
-            <li><a href="#"><img src="img/main-visual-m-03.jpeg" alt="000 000 000" /></a></li>
-            <li><a href="#"><img src="img/main-visual-m-04.jpeg" alt="000 000 000" /></a></li>
-            <li><a href="#"><img src="img/main-visual-m-05.png" alt="000 000 000" /></a></li>
-            <li><a href="#"><img src="img/main-visual-m-06.png" alt="000 000 000" /></a></li>
-          </ul>
-        </div>
-        <div class="indicator">
-          <ul>
-            <li class="on"><a href="#">1번 슬라이드</a></li>
-            <li><a href="#">2번 슬라이드</a></li>
-            <li><a href="#">3번 슬라이드</a></li>
-            <li><a href="#">4번 슬라이드</a></li>
-            <li><a href="#">5번 슬라이드</a></li>
-            <li><a href="#">6번 슬라이드</a></li>
-          </ul>
-        </div>
-        <div class="control">
-            <a href="#" class="prev">PREV</a>
-            <a href="#" class="next">NEXT</a>
+        <div id="image-slide-01">
+          <div class="box">
+            <p class="dummy mobile"><img src="img/main-visual-m-01.jpeg" alt="000 000 000" /></p>
+            <ul class="slide">
+              <li class="on">
+                <a href="#">
+                  <img src="img/main-visual-01.jpeg" alt="000 000 000" />
+                  <img src="img/main-visual-m-01.jpeg" alt="000 000 000" />
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <img src="img/main-visual-02.jpeg" alt="000 000 000" />
+                  <img src="img/main-visual-m-02.jpeg" alt="000 000 000" />
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <img src="img/main-visual-03.jpeg" alt="000 000 000" />
+                  <img src="img/main-visual-m-03.jpeg" alt="000 000 000" />
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <img src="img/main-visual-04.jpeg" alt="000 000 000" />
+                  <img src="img/main-visual-m-04.jpeg" alt="000 000 000" />
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <img src="img/main-visual-05.png" alt="000 000 000" />
+                  <img src="img/main-visual-m-05.png" alt="000 000 000" />
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <img src="img/main-visual-06.png" alt="000 000 000" />
+                  <img src="img/main-visual-m-06.png" alt="000 000 000" />
+                </a>
+              </li>
+            </ul>
+            <!-- <ul class="slide mobile">
+              <li class="on">
+                <a href="#"><img src="img/main-visual-m-01.jpeg" alt="000 000 000" /></a></li>
+              <li><a href="#"><img src="img/main-visual-m-02.jpeg" alt="000 000 000" /></a></li>
+              <li><a href="#"><img src="img/main-visual-m-03.jpeg" alt="000 000 000" /></a></li>
+              <li><a href="#"><img src="img/main-visual-m-04.jpeg" alt="000 000 000" /></a></li>
+              <li><a href="#"><img src="img/main-visual-m-05.png" alt="000 000 000" /></a></li>
+              <li><a href="#"><img src="img/main-visual-m-06.png" alt="000 000 000" /></a></li>
+            </ul> -->
+          </div>
+          <div class="controller">
+            <ul class="indicator">
+  
+            </ul>
+            <div class="control">
+                <a href="#" class="prev">PREV</a>
+                <a href="#" class="next">NEXT</a>
+                <a href="#" class="play pc">
+                  <i class="xi-play"><span>타이머 시작</span></i>
+                  <i class="xi-pause"><span>타이머 정지</span></i>
+                </a>
+            </div>
+          </div>
         </div>
       </section>
       <section id="news" class="clearfix">
-        <div class="box">
+        <div class="box" id="banner-slide-01">
           <div class="content">
             <ul class="top">
               <li>
@@ -406,7 +437,7 @@
             </div>
           </div>
           <div class="slide-box">
-            <ul>
+            <ul class="slide">
               <li>
                 <a href="#">
                   <img src="img/news-01.jpeg" alt="2월 이달의 도넛 30% OFF">
@@ -464,10 +495,18 @@
               </li>
             </ul>
           </div>
-          <ul class="indicator pc">
-            <li class="on"><a href="#">1번 슬라이드</a></li>
-            <li><a href="#">2번 슬라이드</a></li>
-          </ul>
+          <div class="controller pc">
+            <ul class="indicator">
+              <li class="on"><a href="#">1번 슬라이드</a></li>
+              <li><a href="#">2번 슬라이드</a></li>
+            </ul>
+            <div class="control">
+              <a href="#" class="play">
+                <i class="xi-play"><span>타이머 시작</span></i>
+                <i class="xi-pause"><span>타이머 정지</span></i>
+              </a>
+            </div>
+          </div>
         </div>
       </section>
       <div class="break" id="break">
@@ -532,8 +571,8 @@
           <li><a href="#"><i class="fab fa-youtube"><span>Youtube</span></i></a></li>
           <li><a href="#"><i class="xi-twitter"><span>Twitter</span></i></a></li>
         </ul>
-        <div class="banner">
-          <ul>
+        <div class="banner" id="image-slide-02">
+          <ul class="slide">
             <li>
               <a href="https://www.instagram.com/dunkin_kr/" target="_blank"><img src="img/bottom-visual-01.jpg" alt="" /></a>
             </li>
@@ -740,71 +779,9 @@
       </div>
     </footer>
   </div> <!-- end of wrapper -->
-
 <script>
-
-setGNB();
-
-document.addEventListener('scroll', function() {
-  setActiveScroll('break');
-  setActiveScroll('find');
-});
-
-document.querySelector('#monthly div.pull-down a').addEventListener('click', function() {
-  document.getElementById('monthly').classList.toggle('show');
-});
-
-document.querySelector('#header .top-menu ul > li.search label').addEventListener('click', function() {
-  this.parentNode.classList.toggle('on');
-});
-
-function setGNB() {
-  document.querySelectorAll('#gnb > ul > li').forEach(function(el, i) {
-    console.log(el);
-    el.classList.remove('on');
-    el.addEventListener('mouseenter', function(el) {
-      for (let sibling of this.parentNode.children) {
-        sibling.classList.remove('on');
-      }
-      this.classList.add('on');  
-    });
-    document.querySelector('#gnb').addEventListener('mouseleave', function() {
-      el.classList.remove('on');
-    });
-  });
-}
-
-function setActiveScroll(selector) {
-  var scrollAmt = window.pageYOffset;
-  var el = document.getElementById(selector);
-  // var el = document.getElementById('break');
-  var elTop = (el.offsetTop + 176) - window.innerHeight;
-  var windowHeight = window.innerHeight;
-  console.log(el, scrollAmt, elTop, windowHeight);
-  var activeAmt = 100;
-
-  if (scrollAmt < elTop + activeAmt) {
-    el.classList.remove('active');
-  } else {
-    el.classList.add('active');
-  }
-}
-
-function showSlide(n) {
-  
-}
-
-$('#gnb li.card').addClass('pc');
-$('#gnb li.card + li').addClass('mobile');
-
-$('#header a.menu-o').on('click', function() {
-  $('#header > .btm-menu').addClass('on');
-});
-
-$('#header a.menu-x').on('click', function(){
-  $('#header > .btm-menu').removeClass('on')
-});
-
+  $('#gnb li.card').addClass('pc');
+  $('#gnb li.card + li').addClass('mobile');
 </script>
 </body>
 </html>
