@@ -4,20 +4,29 @@ document.addEventListener('DOMContentLoaded',function() {
   setMonthlyUI();
   setGNB();
   setSlide('image-slide-01', 'image', true);
-  setSlide('banner-slide-01', 'banner', false, 4);
-
+  setSlide('banner-slide-01', 'banner', true, 4);
+  // setInfinite();
+  setBannnerScroll('banner-slide-01');
+  setBannnerScroll('banner-scroll');
 });
 
 var isMaskOn = '';
 
 function preventDefaultAnchor() {
-  document.addEventListener('click', function(e) {
+  document.onclick = function(e) {
     var target = e.target.getAttribute('href');
-    console.log(target);
+    console.log(e.target);
     if (target === '#' || target === null) {
       e.preventDefault();
     }
-  });
+  }
+  // document.addEventListener('click', function(e) {
+  //   var target = e.target.getAttribute('href');
+  //   console.log(e.target);
+  //   if (target === '#' || target === null) {
+  //     e.preventDefault();
+  //   }
+  // });
 }
 
 document.addEventListener('scroll', function() {
@@ -133,72 +142,72 @@ function setBannerSlide() {
 }
 
 function setSlide(id, type, timerStatus, show) {
-  document.querySelectorAll('#' + id).forEach(function(el, i) {
-    var selector = document.getElementById(id);
-    var numSlide = selector.querySelectorAll('.slide > li').length;
-    var slideNow = 0;
-    var slidePrev = 0;
-    var slideNext = 0;
-    var slideFirst = 1;
-    var timerId = '';
-    var timerSpeed = 2000;
-    var isTimerOn = timerStatus;
-    var bounceTimerId = '';
-    var throttleCounter = 0;
-    var slideType = type;
-    var leftValue = 0;
-    var offsetWidth = 0;
-    var numtoShow = (show === undefined ? 1 : show);
-    var numtoSlide = Math.ceil(numSlide / numtoShow);
+  var selector = document.getElementById(id);
+  console.log(id);
+  var numSlide = selector.querySelectorAll('.slide > li').length;
+  var slideNow = 0;
+  var slidePrev = 0;
+  var slideNext = 0;
+  var slideFirst = 1;
+  var timerId = '';
+  var timerSpeed = 2000;
+  var isTimerOn = timerStatus;
+  var bounceTimerId = '';
+  var throttleCounter = 0;
+  var slideType = type;
+  var leftValue = 0;
+  var offsetWidth = 0;
+  var numtoShow = (show === undefined ? 1 : show);
+  var numtoSlide = Math.ceil(numSlide / numtoShow);
 
-    if (slideType === 'image') {
-      selector.querySelectorAll('.slide > li').forEach(function(el, i) {
-        el.setAttribute('style', 'left: ' + (i * 100) + '%; display: block;');
-        selector.querySelector('.indicator').innerHTML += '<li><a href="#">' + (i + 1) + '번 슬라이드</a></li>\n';
-      });
-    } else if (slideType === 'banner') {
-      // selector.querySelectorAll('.slide > li').forEach(function(el, i) {
-      //   el.setAttribute('style', 'left: ' + (i * 25) + '%; display: block;');
-      // });
-      setStatus();
-      // console.log(numtoSlide);
+  if (slideType === 'image') {
+    selector.querySelectorAll('.slide > li').forEach(function(el, i) {
+      el.setAttribute('style', 'left: ' + (i * 100) + '%; display: block;');
+      selector.querySelector('.indicator').innerHTML += '<li><a href="#">' + (i + 1) + '번 슬라이드</a></li>\n';
+    });
+  } else if (slideType === 'banner') {
+    setStatus();
+    // console.log(numtoSlide);
 
-      window.addEventListener('resize', function() {
-        //throttle
-        throttleCounter++;
-        if (throttleCounter === 10) {
-          setStatus();
-          throttleCounter = 0;
-        }
-        //debounce
-        clearTimeout(bounceTimerId);
-        bounceTimerId = setTimeout(function() {
-          setStatus();
-        }, 100)
-      });
-    }
+    window.addEventListener('resize', function() {
+      //throttle
+      throttleCounter++;
+      if (throttleCounter === 10) {
+        setStatus();
+        throttleCounter = 0;
+      }
+      //debounce
+      clearTimeout(bounceTimerId);
+      bounceTimerId = setTimeout(function() {
+        setStatus();
+      }, 100)
+    });
+  }
 
-    if (isTimerOn === true) {
-      selector.querySelector('.control a.play').classList.add('on');
-    } else {
-      selector.querySelector('.control a.play').classList.remove('on');
-    }
+  if (isTimerOn === true) {
+    selector.querySelector('.control a.play').classList.add('on');
+  } else {
+    selector.querySelector('.control a.play').classList.remove('on');
+  }
 
-    showSlide(slideFirst);
+  showSlide(slideFirst);
 
-
+  if (selector.querySelectorAll('.indicator li a') !== null) {
     selector.querySelectorAll('.indicator li a').forEach(function(el, i) {
       el.addEventListener('click', function() {
         showSlide(i + 1);
       }, false);
     });
-    
-    selector.querySelectorAll('.slide li a').forEach(function(el, i) {
-      el.addEventListener('focus', function() {
-        showSlide(i + 1);
-      }, false);
-    });
-    
+  };
+  
+  selector.querySelectorAll('.slide li a').forEach(function(el, i) {
+    el.addEventListener('focus', function() {
+      showSlide(i + 1);
+    }, false);
+  });
+  
+
+  if (selector.querySelector('.control a.prev') !== null) {
     selector.querySelector('.control a.prev').addEventListener('click', function() {
       showSlide(slidePrev);
     }, false);
@@ -206,74 +215,156 @@ function setSlide(id, type, timerStatus, show) {
     selector.querySelector('.control a.next').addEventListener('click', function() {
       showSlide(slideNext);
     }, false);
+  }
+  
+  selector.querySelector('.control a.play').addEventListener('click', function(e) {
+    // alert('test');
+    // console.log(e.currentTarget);
+    if (isTimerOn === true) {
+      stopTimer();
+    } else {
+      startTimer();
+    }
+  }, false);
 
-    selector.querySelector('.control a.play').addEventListener('click', function() {
-      if (isTimerOn === true) {
-        stopTimer();
-      } else {
-        startTimer();
-      }
-    }, false);
-
-    function startTimer() {
+  function startTimer() {
+    timerId = setTimeout(function() {showSlide(slideNext);}, timerSpeed);
+    selector.querySelector('.control a.play').classList.add('on');
+    isTimerOn = true;
+  }
+  
+  function stopTimer() {
+    clearTimeout(timerId);
+    selector.querySelector('.control a.play').classList.remove('on');
+    isTimerOn = false;
+  }
+  
+  function resetTimer() {
+    clearTimeout(timerId);
+    if (isTimerOn === true) {
       timerId = setTimeout(function() {showSlide(slideNext);}, timerSpeed);
-      selector.querySelector('.control a.play').classList.add('on');
-      isTimerOn = true;
     }
-    
-    function stopTimer() {
-      clearTimeout(timerId);
-      selector.querySelector('.control a.play').classList.remove('on');
-      isTimerOn = false;
-    }
-    
-    function resetTimer() {
-      clearTimeout(timerId);
-      if (isTimerOn === true) {
-        timerId = setTimeout(function() {showSlide(slideNext);}, timerSpeed);
-      }
-    }
+  }
 
-    function showSlide(n) {
-      resetTimer();
-      if (slideType === 'image') {
-        selector.querySelector('.slide').setAttribute('style', 'transition: left 0.3s; left:' + (-(n - 1) * 100) + '%');
-        selector.querySelectorAll('.indicator > li').forEach(function(el, i) {
-          el.classList.remove('on');
-        });
-        selector.querySelector('.indicator > li:nth-child(' + n + ')').classList.add('on');
-        slideNow = n;
-        slidePrev = (n === 1) ? numSlide : (n - 1);
-        slideNext = (n === numSlide) ? 1 : (n + 1);
-      } else if (slideType === 'banner' && window.innerWidth > 1024) {
-        if (n >= numtoSlide) n = numtoSlide;
-        selector.querySelector('.slide').setAttribute('style', 'transition: left 0.3s; left:' + (-(n -1) * leftValue) + 'px');
-        selector.querySelectorAll('.indicator > li').forEach(function(el, i) {
-          el.classList.remove('on');
-        });
-        selector.querySelector('.indicator > li:nth-child(' + n + ')').classList.add('on');
-        slideNow = n;
-        slidePrev = (n === 1) ? numtoSlide : (n - 1);
-        slideNext = (n === numtoSlide) ? 1 : (n + 1);
-      }
-    } 
-
-
-    function setStatus() {
-      offsetWidth = 0;
-      selector.querySelectorAll('.slide > li').forEach(function(el, i) {
-        //get li margin-right value
-        var style = el.currentStyle || window.getComputedStyle(el);
-        var marginRightValue = parseInt(style.marginRight);
-
-        if (numtoShow > i) {
-          offsetWidth += (el.offsetWidth + marginRightValue);
-          console.log(offsetWidth);
-        }
+  function showSlide(n) {
+    resetTimer();
+    if (slideType === 'image') {
+      selector.querySelector('.slide').setAttribute('style', 'transition: left 0.3s; left:' + (-(n - 1) * 100) + '%');
+      selector.querySelectorAll('.indicator > li').forEach(function(el, i) {
+        el.classList.remove('on');
       });
-      //adjusted for rounding
-      leftValue = offsetWidth - 1;
-      console.log(leftValue);
+      selector.querySelector('.indicator > li:nth-child(' + n + ')').classList.add('on');
+      slideNow = n;
+      slidePrev = (n === 1) ? numSlide : (n - 1);
+      slideNext = (n === numSlide) ? 1 : (n + 1);
+    } else if (slideType === 'banner' && window.innerWidth > 1024) {
+      if (n >= numtoSlide) n = numtoSlide;
+      selector.querySelector('.slide').setAttribute('style', 'transition: left 0.3s; left:' + (-(n -1) * leftValue) + 'px');
+      selector.querySelectorAll('.indicator > li').forEach(function(el, i) {
+        el.classList.remove('on');
+      });
+      selector.querySelector('.indicator > li:nth-child(' + n + ')').classList.add('on');
+      slideNow = n;
+      slidePrev = (n === 1) ? numtoSlide : (n - 1);
+      slideNext = (n === numtoSlide) ? 1 : (n + 1);
+    }
+  } 
+
+
+  function setStatus() {
+    offsetWidth = 0;
+    selector.querySelectorAll('.slide > li').forEach(function(el, i) {
+      //get li margin-right value
+      var style = el.currentStyle || window.getComputedStyle(el);
+      var marginRightValue = parseInt(style.marginRight);
+
+      if (numtoShow > i) {
+        offsetWidth += (el.offsetWidth + marginRightValue);
+        console.log(offsetWidth);
+      }
+    });
+    //adjusted for rounding
+    leftValue = offsetWidth - 1;
+    console.log(leftValue);
+  }
+};
+
+function setInfinite() {
+  var selector = document.getElementById('infinite-slide');
+  var numSlide = selector.querySelectorAll('.slide > li').length;
+  
+}
+
+function setBannnerScroll(id) {
+  var selector = document.getElementById(id);
+  var numBanner = selector.querySelectorAll('.slide > li').length;
+  var scrollBoxMaxWidth = 0;
+  var scrollBarWidth = 0;
+  var bannerWidth = 0;
+  var startX = 0;
+  var delX = 0;
+  var offsetX = 0;
+  var offsetLeftScroll = 0;
+  var offsetLeftScrollMax = 0;
+
+  setScrollBar();
+
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > scrollBoxMaxWidth + 20) {
+      selector.querySelector('.scroll-bar').setAttribute('style', 'visibility: hidden;');
+    } else {
+      selector.querySelector('.scroll-bar').setAttribute('style', 'visibility: visible;');
     }
   });
+
+  selector.querySelector('.scroll-bar a').addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    startX = e.clientX;
+    offsetX = this.offsetLeft;
+
+    document.addEventListener('mousemove', function(e) {
+      delX = e.clientX - startX;
+      offsetLeftScroll = offsetX + delX;
+      if (offsetLeftScroll < 0) offsetLeftScroll = 0;
+      if (offsetLeftScroll > offsetLeftScrollMax) offsetLeftScroll = offsetLeftScrollMax;
+      selector.querySelector('.scroll-bar a').style.left = offsetLeftScroll + 'px';
+    })
+
+  })
+
+
+  function setScrollBar() {
+    scrollBarWidth = 0;
+    scrollBarWidth = 100 / numBanner;
+    bannerWidth = 0;
+
+    selector.querySelectorAll('.slide > li').forEach(function(el, i) {
+      // console.log(el, i);
+      var style = el.currentStyle || window.getComputedStyle(el);
+      var marginLeftValue = parseInt(style.marginLeft);
+      // console.log('marginRight:' + marginLeftValue);
+      // console.log('offsetWidth:' + el.offsetWidth);
+
+      if (numBanner > i) {
+        bannerWidth += (el.offsetWidth + marginLeftValue);
+        // console.log('bannerWidth:' + bannerWidth);
+      }
+    });
+
+    scrollBoxMaxWidth = bannerWidth;
+    // console.log('scrollBoxMaxWidth:' + scrollBoxMaxWidth);
+    offsetLeftScrollMax = 100 - scrollBarWidth;
+
+
+    selector.querySelector('.scroll-bar a').setAttribute('style', 'width: ' + scrollBarWidth + '%;');
+    selector.querySelector('.scroll-bar').setAttribute('style', 'max-width: ' + scrollBoxMaxWidth + 'px');
+  }
+
 }
+
+/*
+ISSUES:
+
+1. offsetLeftScrollMax is 80% but need to convert to equivalent px. meaning I cannot use scrollBarWidth as % and find using forEach li => offsetWidth;
+
+*/
