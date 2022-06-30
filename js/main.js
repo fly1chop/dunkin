@@ -5,9 +5,9 @@ document.addEventListener('DOMContentLoaded',function() {
   setGNB();
   setSlide('image-slide-01', 'image', true);
   setSlide('banner-slide-01', 'banner', true, 4);
-  // setInfinite();
-  setBannnerScroll('banner-slide-01');
-  setBannnerScroll('banner-scroll');
+  setBannerScroll('banner-slide-01');
+  setBannerScroll('banner-scroll');
+  // setBannerScroll();
 });
 
 var isMaskOn = '';
@@ -15,18 +15,11 @@ var isMaskOn = '';
 function preventDefaultAnchor() {
   document.onclick = function(e) {
     var target = e.target.getAttribute('href');
-    console.log(e.target);
+    // console.log(e.target);
     if (target === '#' || target === null) {
       e.preventDefault();
     }
   }
-  // document.addEventListener('click', function(e) {
-  //   var target = e.target.getAttribute('href');
-  //   console.log(e.target);
-  //   if (target === '#' || target === null) {
-  //     e.preventDefault();
-  //   }
-  // });
 }
 
 document.addEventListener('scroll', function() {
@@ -137,10 +130,6 @@ function setActiveScroll(selector) {
   }
 }
 
-function setBannerSlide() {
-
-}
-
 function setSlide(id, type, timerStatus, show) {
   var selector = document.getElementById(id);
   console.log(id);
@@ -181,6 +170,10 @@ function setSlide(id, type, timerStatus, show) {
       bounceTimerId = setTimeout(function() {
         setStatus();
       }, 100)
+
+      if (window.innerWidth > 1024) {
+        showSlide(1);
+      }
     });
   }
 
@@ -267,7 +260,7 @@ function setSlide(id, type, timerStatus, show) {
       slideNow = n;
       slidePrev = (n === 1) ? numtoSlide : (n - 1);
       slideNext = (n === numtoSlide) ? 1 : (n + 1);
-    }
+    } else {return false};
   } 
 
 
@@ -280,40 +273,37 @@ function setSlide(id, type, timerStatus, show) {
 
       if (numtoShow > i) {
         offsetWidth += (el.offsetWidth + marginRightValue);
-        console.log(offsetWidth);
+        // console.log(offsetWidth);
       }
     });
     //adjusted for rounding
     leftValue = offsetWidth - 1;
-    console.log(leftValue);
+    // console.log(leftValue);
   }
 };
 
-function setInfinite() {
-  var selector = document.getElementById('infinite-slide');
-  var numSlide = selector.querySelectorAll('.slide > li').length;
-  
-}
-
-function setBannnerScroll(id) {
+function setBannerScroll(id) {
   var selector = document.getElementById(id);
+  console.log(selector);
   var numBanner = selector.querySelectorAll('.slide > li').length;
-  var scrollBoxMaxWidth = 0;
-  var scrollBarWidth = 0;
-  var bannerWidth = 0;
-  var startX = 0;
-  var delX = 0;
-  var offsetX = 0;
+  var scrollBarWidth = selector.querySelector('.scroll-bar a').offsetWidth;
+  var offsetLeft = 0;
   var offsetLeftScroll = 0;
-  var offsetLeftScrollMax = 0;
+  var scrollMax = selector.querySelector('.scroll-bar').offsetWidth;
+  var bannerWidth = 0;
+  var bannerBox = selector.querySelector('.banner-box').offsetWidth;
+  console.log(bannerBox);
+  var startX = 0;
+  var offsetX = 0;
+  var deltaX = 0;
+  
+  selector.querySelectorAll('.slide > li').forEach(function(el, i) {
+    var style = el.currentStyle || window.getComputedStyle(el);
+    var marginLeftValue = parseInt(style.marginLeft);
 
-  setScrollBar();
-
-  window.addEventListener('resize', function() {
-    if (window.innerWidth > scrollBoxMaxWidth + 20) {
-      selector.querySelector('.scroll-bar').setAttribute('style', 'visibility: hidden;');
-    } else {
-      selector.querySelector('.scroll-bar').setAttribute('style', 'visibility: visible;');
+    if (numBanner > i) {
+      bannerWidth += (el.offsetWidth + marginLeftValue);
+      console.log('bannerWidth: ' + bannerWidth);
     }
   });
 
@@ -322,49 +312,20 @@ function setBannnerScroll(id) {
     startX = e.clientX;
     offsetX = this.offsetLeft;
 
-    document.addEventListener('mousemove', function(e) {
-      delX = e.clientX - startX;
-      offsetLeftScroll = offsetX + delX;
-      if (offsetLeftScroll < 0) offsetLeftScroll = 0;
-      if (offsetLeftScroll > offsetLeftScrollMax) offsetLeftScroll = offsetLeftScrollMax;
-      selector.querySelector('.scroll-bar a').style.left = offsetLeftScroll + 'px';
+    document.addEventListener('mousemove', moveFunction);
+    document.addEventListener('mouseup', function() {
+      document.removeEventListener('mousemove', moveFunction);
     })
 
+    function moveFunction(e) {
+      deltaX = e.clientX - startX;
+      offsetLeft = offsetX + deltaX;
+      if (offsetLeft < 0) offsetLeft = 0;
+      if (offsetLeft > (scrollMax - scrollBarWidth)) offsetLeft = (scrollMax - scrollBarWidth);
+      selector.querySelector('.scroll-bar a').style.left = offsetLeft + 'px';
+      offsetLeftScroll = (-offsetLeft) * (bannerWidth / bannerBox)
+      selector.querySelector('.slide').style.left = offsetLeftScroll + 'px';
+    }
   })
-
-
-  function setScrollBar() {
-    scrollBarWidth = 0;
-    scrollBarWidth = 100 / numBanner;
-    bannerWidth = 0;
-
-    selector.querySelectorAll('.slide > li').forEach(function(el, i) {
-      // console.log(el, i);
-      var style = el.currentStyle || window.getComputedStyle(el);
-      var marginLeftValue = parseInt(style.marginLeft);
-      // console.log('marginRight:' + marginLeftValue);
-      // console.log('offsetWidth:' + el.offsetWidth);
-
-      if (numBanner > i) {
-        bannerWidth += (el.offsetWidth + marginLeftValue);
-        // console.log('bannerWidth:' + bannerWidth);
-      }
-    });
-
-    scrollBoxMaxWidth = bannerWidth;
-    // console.log('scrollBoxMaxWidth:' + scrollBoxMaxWidth);
-    offsetLeftScrollMax = 100 - scrollBarWidth;
-
-
-    selector.querySelector('.scroll-bar a').setAttribute('style', 'width: ' + scrollBarWidth + '%;');
-    selector.querySelector('.scroll-bar').setAttribute('style', 'max-width: ' + scrollBoxMaxWidth + 'px');
-  }
-
+  
 }
-
-/*
-ISSUES:
-
-1. offsetLeftScrollMax is 80% but need to convert to equivalent px. meaning I cannot use scrollBarWidth as % and find using forEach li => offsetWidth;
-
-*/
